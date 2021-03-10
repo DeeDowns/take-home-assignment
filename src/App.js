@@ -17,14 +17,35 @@ This      is a second paragraph with extraneous whitespace.`);
     transformText(textInput);
   };
 
-  const transformText = input => {
+  /*
+  - A line cannot be:
+    - greater than 80 chars 
+    - Exceptions & Considerations:
+      - if the 81st char is in the middle of a word
+        - break the line on the space before the word
+      -  if a single word is greater than 80 chars
+        - that word will take up its own line
+  - Whitespace: 
+    - There needs to be 1 blank line between paragraphs
+    - There cannot be more than 1 
+      - blank line between paragraphs
+      - space between words
+  */
+
+  const transformText = input => { 
     let output = input;
-    /*
-    your work goes here!
-    */
+
+    output = output.split('\n\n')
+    for (let i = 0; i < output.length; i++) {
+      output[i] = output[i].replace('\n', ' ') 
+    }
+    // output = output.join('\n\n')
+   
     setTextOutput(output);
   }
-  
+
+  console.log(textOutput)
+
   return (
     <div className="App">
       <header>
