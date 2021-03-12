@@ -32,19 +32,38 @@ This      is a second paragraph with extraneous whitespace.`);
       - space between words
   */
 
+//  console.log(textOutput.split(/\n{2}/g))
   const transformText = input => { 
-    let output = input;
+    let paragraphs = []
+    let wrappedParagraphs = []
 
-    output = output.split('\n\n')
-    for (let i = 0; i < output.length; i++) {
-      output[i] = output[i].replace('\n', ' ') 
+    for (let line of input.split(/\n{2}/g)) {
+      line = line.replace(/\s{3,}/g, ' ')
+      paragraphs.push(line.replace('\n',' '))
     }
-    // output = output.join('\n\n')
-   
-    setTextOutput(output);
+    console.log('PARAGRAPHS ARR',paragraphs)
+  
+    for (let i = 0; i < paragraphs.length; i++) {
+      if (paragraphs[i] !== paragraphs[paragraphs.length -1]) {
+        paragraphs[i] = paragraphs[i] + '\n\n'
+      }
+      if (paragraphs[i].length > 80) {
+        // console.log(paragraphs[i].substring(0,80) + '\n')
+        // console.log(paragraphs[i].substring(80))
+        wrappedParagraphs.push(paragraphs[i].substring(0,80) + '\n')
+        wrappedParagraphs.push(paragraphs[i].substring(80))
+      } else {
+        wrappedParagraphs.push(paragraphs[i])
+      }
+      
+    }
+    console.log('WRAPPED ARR', wrappedParagraphs)
+    console.log('WRAPPED AND JOINED', wrappedParagraphs.join(''))
+    setTextOutput(wrappedParagraphs.join(''))
   }
 
-  console.log(textOutput)
+
+  // transformText(textInput)
 
   return (
     <div className="App">
