@@ -34,7 +34,7 @@ This      is a second paragraph with extraneous whitespace.`);
 
   const transformText = input => { 
     // split words by paragraphs and remove extra blank lines
-    let splitParagraphs = input.split(/\n{2}/g).filter(line => line != '')
+    let splitParagraphs = input.split(/\n{2}/g).filter(line => line !== '')
     let output = ''
 
     function format(words) {
@@ -55,7 +55,7 @@ This      is a second paragraph with extraneous whitespace.`);
         }
         count += words[i].length + space
       }
-      
+
       groups.push(noWrap)
       if (wrap) {
         groups.push('\n' + wrap)
