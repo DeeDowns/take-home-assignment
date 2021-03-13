@@ -32,38 +32,47 @@ This      is a second paragraph with extraneous whitespace.`);
       - space between words
   */
 
-//  console.log(textOutput.split(/\n{2}/g))
   const transformText = input => { 
-    let paragraphs = []
-    let wrappedParagraphs = []
+    // splits words by paragraphs and removes extra blank lines
+    let splitParagraphs = input.split(/\n{2}/g).filter(line => line != '')
+    let output = ''
 
-    for (let line of input.split(/\n{2}/g)) {
-      line = line.replace(/\s{3,}/g, ' ')
-      paragraphs.push(line.replace('\n',' '))
-    }
-    console.log('PARAGRAPHS ARR',paragraphs)
+    function format(words) {
+      let lineLimit = 80
+      let count = 0
+      let space = 1
+      let groups = []
   
-    for (let i = 0; i < paragraphs.length; i++) {
-      if (paragraphs[i] !== paragraphs[paragraphs.length -1]) {
-        paragraphs[i] = paragraphs[i] + '\n\n'
-      }
-      if (paragraphs[i].length > 80) {
-        // console.log(paragraphs[i].substring(0,80) + '\n')
-        // console.log(paragraphs[i].substring(80))
-        wrappedParagraphs.push(paragraphs[i].substring(0,80) + '\n')
-        wrappedParagraphs.push(paragraphs[i].substring(80))
-      } else {
-        wrappedParagraphs.push(paragraphs[i])
-      }
+      let noWrap = ''
+      let wrap = ''
+      // wrap words onto new line if count exceeds 80 chars
+      for(let i = 0; i < words.length; i++) {
+        if (count + words[i].length < lineLimit) {
+          noWrap += words[i] + ' '
+          
+        } else {
+          console.log(words[i])
+          wrap += words[i] + ' '
+        }
+        count += words[i].length + space
       
+      }
+      groups.push(noWrap)
+      if (wrap) {
+        groups.push('\n' + wrap)
+      }
+  
+      return groups.join(' ')
     }
-    console.log('WRAPPED ARR', wrappedParagraphs)
-    console.log('WRAPPED AND JOINED', wrappedParagraphs.join(''))
-    setTextOutput(wrappedParagraphs.join(''))
+  
+    // run each each word of a paragraph through formatter and add line breaks
+    for (let i = 0; i < splitParagraphs.length; i++) {
+      let wordsOfP = splitParagraphs[i].split(/\s{1,}/g)
+      output += format(wordsOfP) + '\n\n'
+    }
+    // remove line breaks from last paragraph
+    setTextOutput(output.slice(0, [output.length - 2]))
   }
-
-
-  // transformText(textInput)
 
   return (
     <div className="App">
