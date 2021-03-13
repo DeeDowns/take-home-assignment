@@ -34,14 +34,14 @@ This      is a second paragraph with extraneous whitespace.`);
 
   const transformText = input => { 
     // split words by paragraphs and remove extra blank lines
-    let splitParagraphs = input.split(/\n{2}/g).filter(line => line !== '')
+    let paragraphsArr = input.split(/\n{2}/g).filter(line => line !== '')
     let output = ''
 
-    function format(words) {
+    function textFormatter(words) {
       let lineLimit = 80
       let count = 0
       let space = 1
-      let groups = []
+      let line = []
   
       let noWrap = ''
       let wrap = ''
@@ -56,18 +56,18 @@ This      is a second paragraph with extraneous whitespace.`);
         count += words[i].length + space
       }
 
-      groups.push(noWrap)
+      line.push(noWrap)
       if (wrap) {
-        groups.push('\n' + wrap)
+        line.push('\n' + wrap)
       }
   
-      return groups.join(' ')
+      return line.join(' ')
     }
   
     // run each each word of a paragraph through formatter and add line breaks
-    for (let i = 0; i < splitParagraphs.length; i++) {
-      let wordsOfP = splitParagraphs[i].split(/\s{1,}/g)
-      output += format(wordsOfP) + '\n\n'
+    for (let i = 0; i < paragraphsArr.length; i++) {
+      let paragraphText = paragraphsArr[i].split(/\s{1,}/g)
+      output += textFormatter(paragraphText) + '\n\n'
     }
     // remove line breaks from last paragraph
     setTextOutput(output.slice(0, [output.length - 2]))
