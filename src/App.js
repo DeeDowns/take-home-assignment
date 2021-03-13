@@ -33,7 +33,7 @@ This      is a second paragraph with extraneous whitespace.`);
   */
 
   const transformText = input => { 
-    // splits words by paragraphs and removes extra blank lines
+    // split words by paragraphs and remove extra blank lines
     let splitParagraphs = input.split(/\n{2}/g).filter(line => line != '')
     let output = ''
 
@@ -51,12 +51,11 @@ This      is a second paragraph with extraneous whitespace.`);
           noWrap += words[i] + ' '
           
         } else {
-          console.log(words[i])
           wrap += words[i] + ' '
         }
         count += words[i].length + space
-      
       }
+      
       groups.push(noWrap)
       if (wrap) {
         groups.push('\n' + wrap)
