@@ -2,10 +2,23 @@ import './App.css';
 import React from "react";
 
 function App() {
-  const [textInput, setTextInput] = React.useState(`This is
-a badly formatted file. This line is pretty long! It's way more than 80 characters! I feel a line wrap coming on!
+  const [textInput, setTextInput] = React.useState(`This is an extremely long line of text with lots and lot of characters in it. The previous sentence should be on a line by itself, and this one should also. However, this sentence is short. Multiple sentences fit here.
 
-This      is a second paragraph with extraneous whitespace.`);
+A very short paragraph.
+
+
+Another short paragraph, after multiple blank lines.
+
+
+
+Even more blank lines,    as well      as some erratic           space characters.
+
+This
+sentence
+includes
+a few words on lines by themselves that should be combined, and then
+suchaverylongworditbelongsonalinebyitselfeventhoughitislongerthan80charactersandthelinebeforeisshort,
+however, it's fine for these words to go on the next line. Formatting should continue normally at this point.`);
   const [textOutput, setTextOutput] = React.useState('');
 
   const handleChange = event => {
@@ -31,45 +44,39 @@ This      is a second paragraph with extraneous whitespace.`);
       - blank line between paragraphs
       - space between words
   */
+  const transformParagraph = words => {
+    const lineLimit = 80
+    let count = 0
+    let lines = []
 
-  const transformText = input => { 
-    // split words by paragraphs and remove extra blank lines
-    let paragraphsArr = input.split(/\n{2}/g).filter(line => line !== '')
+    let currentLine = []
+    for (let i = 0; i < words.length; i++) {
+      if (count + words[i].length < lineLimit) {
+        currentLine.push(words[i])
+
+      } else {
+        lines.push(currentLine.join(' ') + '\n')
+        currentLine = [words[i]]
+        count = 0
+      }
+      count += words[i].length + 1
+    }
+
+    lines.push(currentLine.join(' ') + '\n')
+    
+
+    return lines.join('')
+  }
+
+  const transformText = input => {
+    let paragraphsArr = input.split(/\n\n+/)
+    console.log(paragraphsArr)
     let output = ''
 
-    function textFormatter(words) {
-      let lineLimit = 80
-      let count = 0
-      let space = 1
-      let line = []
-  
-      let noWrap = ''
-      let wrap = ''
-      // wrap words onto new line if count exceeds 80 chars
-      for(let i = 0; i < words.length; i++) {
-        if (count + words[i].length < lineLimit) {
-          noWrap += words[i] + ' '
-          
-        } else {
-          wrap += words[i] + ' '
-        }
-        count += words[i].length + space
-      }
-
-      line.push(noWrap)
-      if (wrap) {
-        line.push('\n' + wrap)
-      }
-  
-      return line.join(' ')
-    }
-  
-    // run each each word of a paragraph through formatter and add line breaks
     for (let i = 0; i < paragraphsArr.length; i++) {
       let paragraphText = paragraphsArr[i].split(/\s{1,}/g)
-      output += textFormatter(paragraphText) + '\n\n'
+      output += transformParagraph(paragraphText) + '\n\n'
     }
-    // remove line breaks from last paragraph
     setTextOutput(output.slice(0, [output.length - 2]))
   }
 
@@ -80,9 +87,9 @@ This      is a second paragraph with extraneous whitespace.`);
       </header>
       <form onSubmit={handleSubmit}>
         <label>
-          <textarea onChange={handleChange} value={textInput}/>
+          <textarea onChange={handleChange} value={textInput} />
         </label>
-        <input type="submit" value="Submit"/>
+        <input type="submit" value="Submit" />
       </form>
       <div id="result">
         {textOutput}
